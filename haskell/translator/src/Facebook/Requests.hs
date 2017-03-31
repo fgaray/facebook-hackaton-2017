@@ -7,6 +7,17 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE DeriveGeneric #-}
 -- | Peticiones para la API de FB Graph
+--
+--
+-- Agregar una nueva petición:
+--  - Agregar la llamada a la API en Facebook.API
+--  - Agregar un nuevo constructor en FacebookReq en este archivo
+--  - Agregar la instancia para hashear FacebookReq en Hasheable el nuevo
+--  constructor
+--  - Agregar una función para utilizar la nueva API al casi al final de este
+--  archivo
+--
+--
 module Facebook.Requests where
 
 
@@ -109,6 +120,7 @@ fetchReq manager t req =
         GetUserData fields -> API.getUserData token (Just fields)
 
 
+-- Fetch functions
 
 
 getUserData :: FBFields -> GenHaxl u FBUser
@@ -118,7 +130,7 @@ getUserData fields = dataFetch (GetUserData fields)
 
 
 
-
+-- Test
 testHaxl :: IO ()
 testHaxl = do
     let token = Token ""
