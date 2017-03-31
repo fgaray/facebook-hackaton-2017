@@ -29,4 +29,11 @@ executable translator
                        text-show,
                        http-client-tls,
                        async,
-                       hashable
+                       hashable,
+                       persistent,
+                       persistent-template,
+                       persistent-sqlite,
+                       esqueleto,
+                       mtl,
+                       monad-logger,
+                       resourcet
