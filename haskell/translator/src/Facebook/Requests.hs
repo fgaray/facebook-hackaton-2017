@@ -33,6 +33,9 @@ import Control.Concurrent.Async
 import Servant.Client
 import GHC.Generics
 import Data.Hashable
+import System.Environment (getEnv)
+import Control.Monad (liftM)
+import qualified Data.Text as T
 
 import qualified Facebook.API as API
 import Facebook.Types
@@ -133,7 +136,7 @@ getUserData fields = dataFetch (GetUserData fields)
 -- Test
 testHaxl :: IO ()
 testHaxl = do
-    let token = Token ""
+    token <- liftM (Token . T.pack) . getEnv $ "TOKEN"
     state <- initGlobalState 5 token
     env <- initEnv (stateSet state stateEmpty) ()
     r <- runHaxl env $ do
