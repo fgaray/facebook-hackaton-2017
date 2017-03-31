@@ -28,58 +28,23 @@
 --
 module Facebook.API where
 
-import Network.HTTP.Client (Manager, newManager, defaultManagerSettings)
+import Network.HTTP.Client (Manager, newManager)
 import Servant.API
 import Servant.Client
 import Web.HttpApiData
 import Data.Aeson.TH
 import Data.Text (Text)
 import Data.Proxy
-import TextShow
 import Data.Monoid
 import Network.HTTP.Client.TLS (tlsManagerSettings)
 import Servant.Utils.Links
-import Utils
+import Facebook.Types
 
 
 
 -- | Base URL to the version 2.8 of the API
 baseUrl :: BaseUrl
 baseUrl = BaseUrl Https "graph.facebook.com" 443 "/v2.8"
-
-
-
--- API Types
-
-data FBField =
-      FBId
-    | FBName
-    | FBBirthday
-
-instance TextShow FBField where
-    showb FBId       = "id"
-    showb FBName     = "name"
-    showb FBBirthday = "birthday"
-
-newtype FBFields = FBFields [FBField]
-
-instance ToHttpApiData FBFields where
-    toUrlPiece (FBFields [])     = ""
-    toUrlPiece (FBFields (x:[])) = showt x
-    toUrlPiece (FBFields (x:xs)) = showt x <> "," <> toUrlPiece (FBFields xs)
-
-
-data FBUser = FBUser
-    { fbUserId   :: Text
-    , fbUserName :: Maybe Text
-    } deriving Show
-$(deriveJSON defaultOptions { fieldLabelModifier = stripPrefixJSON "fbUser"}  ''FBUser)
-
-
-newtype Token = Token Text
-
-instance ToHttpApiData Token where
-    toUrlPiece (Token txt) = txt
 
 
 

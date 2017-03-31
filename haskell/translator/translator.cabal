@@ -27,4 +27,6 @@ executable translator
                        aeson,
                        text,
                        text-show,
-                       http-client-tls
+                       http-client-tls,
+                       async,
+                       hashable
