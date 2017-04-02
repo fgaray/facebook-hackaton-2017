@@ -39,6 +39,9 @@ import Data.Monoid
 import Network.HTTP.Client.TLS (tlsManagerSettings)
 import Servant.Utils.Links
 import Facebook.Types
+import System.Environment (getEnv)
+import qualified Data.Text as T
+import Control.Monad (liftM)
 
 
 
@@ -75,6 +78,15 @@ run :: ClientM a -> IO (Either ServantError a)
 run endpoint = do
     manager <- newManager tlsManagerSettings
     res <- runClientM endpoint (ClientEnv manager baseUrl)
+    case res of
+      Left err -> error $ show err
+      Right x -> return . Right $ x
+
+runTest :: (Maybe Token -> ClientM a) -> IO (Either ServantError a)
+runTest endpoint = do
+    token <- liftM (Token . T.pack) . getEnv $ "TOKEN"
+    manager <- newManager tlsManagerSettings
+    res <- runClientM (endpoint (Just token)) (ClientEnv manager baseUrl)
     case res of
       Left err -> error $ show err
       Right x -> return . Right $ x
