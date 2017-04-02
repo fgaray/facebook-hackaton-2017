@@ -44,16 +44,21 @@ executables:
     main: Main.hs
     source-dirs: app
     dependencies:
-    - base >=4.7 && <5
-    - translator
+      - base >=4.7 && <5
+      - translator
 tests:
   translator-tests:
     main: Spec.hs
     source-dirs: test
     ghc-options: -threaded
     dependencies:
-    - base
-    - hspec
-    - QuickCheck
-    - translator
-    - http-api-data
+      - base
+      - hspec
+      - QuickCheck
+      - translator
+      - http-api-data
+  translator-docstrings:
+    main: doctest.hs
+    dependencies:
+      - base
+      - doctest

@@ -42,6 +42,7 @@ import Facebook.Types
 import System.Environment (getEnv)
 import qualified Data.Text as T
 import Control.Monad (liftM)
+import Data.Either (isRight)
 
 
 
@@ -82,6 +83,11 @@ run endpoint = do
       Left err -> error $ show err
       Right x -> return . Right $ x
 
+-- | Run a test with a token in the enviroment
+-- >>> let f = flip getUserData
+-- >>> liftM isRight $ runTest (f (Just (FBFields [FBFName, FBFFriends [FBFName]])))
+-- True
+--
 runTest :: (Maybe Token -> ClientM a) -> IO (Either ServantError a)
 runTest endpoint = do
     token <- liftM (Token . T.pack) . getEnv $ "TOKEN"
