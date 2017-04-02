@@ -38,3 +38,13 @@ executable translator
                        monad-logger,
                        resourcet,
                        scotty
+
+
+test-suite translator-tests
+  hs-source-dirs:      test
+  type:          exitcode-stdio-1.0
+  ghc-options:   -threaded
+  main-is:       Spec.hs
+  build-depends: base,
+                 hspec,
+                 QuickCheck
