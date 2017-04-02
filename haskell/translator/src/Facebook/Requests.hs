@@ -140,5 +140,5 @@ testHaxl = do
     state <- initGlobalState 5 token
     env <- initEnv (stateSet state stateEmpty) ()
     r <- runHaxl env $ do
-        getUserData (FBFields [FBName])
+        getUserData (FBFields [FBFName])
     print r

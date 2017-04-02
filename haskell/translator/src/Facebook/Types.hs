@@ -18,17 +18,19 @@ import Data.Hashable
 -- API Types
 
 data FBField =
-      FBId
-    | FBName
-    | FBBirthday
+      FBFId
+    | FBFName
+    | FBFBirthday
+    | FBFFriends [FBField]
     deriving (Eq, Show, Generic)
 instance Hashable FBField
 
 
 instance TextShow FBField where
-    showb FBId       = "id"
-    showb FBName     = "name"
-    showb FBBirthday = "birthday"
+    showb FBFId          = "id"
+    showb FBFName        = "name"
+    showb FBFBirthday    = "birthday"
+    showb (FBFFriends _) = "friends"
 
 newtype FBFields = FBFields [FBField]
     deriving (Eq, Show, Generic)
@@ -37,14 +39,28 @@ instance Hashable FBFields
 instance ToHttpApiData FBFields where
     toUrlPiece (FBFields [])     = ""
     toUrlPiece (FBFields (x:[])) = showt x
+    toUrlPiece (FBFields ((FBFFriends fbs):xs)) = showt (FBFFriends []) <> "{" <> toUrlPiece (FBFields fbs) <> "}" <> "," <> toUrlPiece (FBFields xs)
     toUrlPiece (FBFields (x:xs)) = showt x <> "," <> toUrlPiece (FBFields xs)
 
 
-data FBUser = FBUser
-    { fbUserId   :: Text
-    , fbUserName :: Maybe Text
+data FBFriendsSummary = FBFriendsSummary
+    { fbFriendsSummaryTotal_count :: Int
     } deriving (Show, Generic)
-$(deriveJSON defaultOptions { fieldLabelModifier = stripPrefixJSON "fbUser"}  ''FBUser)
+instance Hashable FBFriendsSummary
+
+
+data FBFriends = FBFriends
+    { fbFriendsData    :: [FBUser]
+    , fbFriendsSummary :: FBFriendsSummary
+    } deriving (Show, Generic)
+instance Hashable FBFriends
+
+
+data FBUser = FBUser
+    { fbUserId      :: Text
+    , fbUserName    :: Maybe Text
+    , fbUserFriends :: Maybe FBFriends
+    } deriving (Show, Generic)
 instance Hashable FBUser
 
 
@@ -54,3 +70,7 @@ newtype Token = Token Text
 instance ToHttpApiData Token where
     toUrlPiece (Token txt) = txt
 
+
+$(deriveJSON defaultOptions { fieldLabelModifier = stripPrefixJSON "fbFriendsSummary"}  ''FBFriendsSummary)
+$(deriveJSON defaultOptions { fieldLabelModifier = stripPrefixJSON "fbFriends"}  ''FBFriends)
+$(deriveJSON defaultOptions { fieldLabelModifier = stripPrefixJSON "fbUser"}  ''FBUser)
