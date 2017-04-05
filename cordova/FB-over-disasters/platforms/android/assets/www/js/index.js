@@ -28,6 +28,24 @@ var app = {
     // 'pause', 'resume', etc.
     onDeviceReady: function() {
         this.receivedEvent('deviceready');
+        console.log(">>>>>> DEVICEREADY");
+
+
+        var success = function(){
+            console.log("sucess");
+
+        }
+        var error = function(){
+            console.log("error");
+        }
+        ibrdtn.greet("inicio", success, error);
+
+        var fn = function(){
+            ibrdtn.greet("click", success, error);
+        }
+
+        var el = document.getElementById("boton")
+        el.addEventListener("click", fn, false);
     },
 
     // Update DOM on a Received Event

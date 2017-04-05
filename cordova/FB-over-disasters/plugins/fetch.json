@@ -22,5 +22,13 @@
         },
         "is_top_level": false,
         "variables": {}
+    },
+    "plugin-ibrdtn": {
+        "source": {
+            "type": "local",
+            "path": "../cordova-plugin-ibrdtn"
+        },
+        "is_top_level": true,
+        "variables": {}
     }
 }
