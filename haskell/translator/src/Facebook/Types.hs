@@ -43,15 +43,34 @@ instance ToHttpApiData FBFields where
     toUrlPiece (FBFields (x:xs)) = showt x <> "," <> toUrlPiece (FBFields xs)
 
 
-data FBFriendsSummary = FBFriendsSummary
-    { fbFriendsSummaryTotal_count :: Int
+data FBDataSummary = FBDataSummary
+    { fbDataSummaryTotal_count :: Int
     } deriving (Show, Generic)
-instance Hashable FBFriendsSummary
+instance Hashable FBDataSummary
 
+data FBCursors = FBCursors
+    { fbCursorsBefore :: Text
+    , fbCursorsAfter  :: Text
+    } deriving (Show, Generic)
+instance Hashable FBCursors
+
+
+data FBPaging = FBPaging
+    { fbPagingCursors :: FBCursors
+    } deriving (Show, Generic)
+instance Hashable FBPaging
+
+
+data FBData a = FBData
+    { fbDatadata    :: [a]
+    , fbDataSummary :: Maybe FBDataSummary
+    , fbDataPaging  :: Maybe FBPaging
+    } deriving (Show, Generic)
+instance Hashable a => Hashable (FBData a)
 
 data FBFriends = FBFriends
     { fbFriendsData    :: [FBUser]
-    , fbFriendsSummary :: FBFriendsSummary
+    , fbFriendsSummary :: FBDataSummary
     } deriving (Show, Generic)
 instance Hashable FBFriends
 
@@ -71,6 +90,8 @@ instance ToHttpApiData Token where
     toUrlPiece (Token txt) = txt
 
 
-$(deriveJSON defaultOptions { fieldLabelModifier = stripPrefixJSON "fbFriendsSummary"}  ''FBFriendsSummary)
+$(deriveJSON defaultOptions { fieldLabelModifier = stripPrefixJSON "fbCursors"}  ''FBCursors)
+$(deriveJSON defaultOptions { fieldLabelModifier = stripPrefixJSON "fbPagin"}  ''FBPaging)
+$(deriveJSON defaultOptions { fieldLabelModifier = stripPrefixJSON "fbDataSummary"}  ''FBDataSummary)
 $(deriveJSON defaultOptions { fieldLabelModifier = stripPrefixJSON "fbFriends"}  ''FBFriends)
 $(deriveJSON defaultOptions { fieldLabelModifier = stripPrefixJSON "fbUser"}  ''FBUser)
