@@ -1,0 +1,13 @@
+
+//dependencies{
+    //compile files('libs/ibrdtn-android-library-debug.aar')
+//}
+
+dependencies {
+    compile(name:'ibrdtn-android-library-debug', ext:'aar')
+}
+repositories{
+    flatDir{
+        dirs 'libs'
+    }
+}
