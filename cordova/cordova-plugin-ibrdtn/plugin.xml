@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    id="plugin-ibrdtn" version="0.1">
+    <name>ibrdtn plugin</name>
+    <description>plugins para la libreria de android ibrdtn</description>
+    <keywords>ibrdtn,dtn</keywords>
+    <engines>
+        <engine name="cordova" version=">=3.7.0" />
+    </engines>
+
+
+    <asset src="ibrdtn.js" target="js/ibrdtn.js" />
+
+    <js-module name="ibrdtn" src="ibrdtn.js">
+        <clobbers target="ibrdtn" />
+    </js-module>
+
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="Ibrdtn">
+                <param name="android-package" value="com.hackerusach.cordovaibrdtn.Ibrdtn"/>
+            </feature>
+        </config-file>
+
+        <config-file target="AndroidManifest.xml" parent="/manifest">
+            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+            <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+            <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+            <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+            <uses-permission android:name="android.permission.INTERNET" />
+
+        </config-file>
+
+        <framework src="build.gradle" custom="true" type="gradleReference" />
+        <source-file src="Ibrdtn.java" target-dir="src/com/hackerusach/cordovaibrdtn" />
+    </platform>
+
+
+</plugin>
