@@ -9,3 +9,6 @@ test:
 
 docstring:
 	stack runghc doctest.hs
+
+logcat:
+	adb logcat

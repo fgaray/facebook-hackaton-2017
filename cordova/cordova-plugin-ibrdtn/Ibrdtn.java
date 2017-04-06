@@ -4,6 +4,8 @@ import org.apache.cordova.*;
 import org.json.JSONArray; 
 import org.json.JSONException;
 import org.json.JSONObject; 
+
+
 public class Ibrdtn extends CordovaPlugin {
 
     CordovaInterface mCordova;
@@ -15,17 +17,14 @@ public class Ibrdtn extends CordovaPlugin {
 
     @Override 
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException{
-        //if("init".equals(action)) {
-            //JSONObject configJson = args.optJSONObject(0); 
-        //}
-        //return super.execute(action, args, callbackContext);
         if (action.equals("echo")) {
             String message = args.getString(0);
             this.echo(message, callbackContext);
             return true;
         }
-        return false;  // Returning false results in a "MethodNotFound" error.
+        return false; 
     } 
+
     private void echo(String message, CallbackContext callbackContext) {
         if (message != null && message.length() > 0) {
             callbackContext.success(message);

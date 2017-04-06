@@ -11,3 +11,12 @@ build:
 
 clean:
 	cordova clean
+
+logcat:
+	adb logcat | grep Disaster
+
+logcat-chrome:
+	adb logcat chromium:I
+
+run:
+	cordova run android
