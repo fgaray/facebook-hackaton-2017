@@ -7,13 +7,10 @@
         "files": {}
     },
     "installed_plugins": {
-        "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "com.hackerusach.fbdisasters"
-        },
-        "cordova-plugin-geolocation": {
-            "PACKAGE_NAME": "com.hackerusach.fbdisasters"
-        },
         "plugin-ibrdtn": {
+            "PACKAGE_NAME": "com.hackerusach.fbdisasters"
+        },
+        "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "com.hackerusach.fbdisasters"
         }
     },
