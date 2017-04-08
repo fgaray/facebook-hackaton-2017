@@ -4,6 +4,7 @@
  * @flow
  */
 
+import ibrdtn from './ibrdtn';
 import React, { Component } from 'react';
 import {
   AppRegistry,
@@ -13,6 +14,10 @@ import {
 } from 'react-native';
 
 export default class FacebookDisaster extends Component {
+  constructor(props){
+      super(props);
+      ibrdtn.show('Awesome', ibrdtn.SHORT); 
+  }
   render() {
     return (
       <View style={styles.container}>
