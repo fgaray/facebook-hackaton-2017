@@ -17,6 +17,10 @@ library:
   - Facebook.Types
   - Web.Webpage
   - Utils
+  - API.Server
+  - API.API
+  - API.Chat
+  - API.GPG
   dependencies:
   - base >=4.7 && <5
   - haxl
@@ -39,6 +43,8 @@ library:
   - monad-logger
   - resourcet
   - scotty
+  - warp
+  - process
 executables:
   translator-exec:
     main: Main.hs

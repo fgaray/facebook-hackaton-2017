@@ -56,13 +56,13 @@ instance Hashable FBCursors
 
 
 data FBPaging = FBPaging
-    { fbPagingCursors :: FBCursors
+    { fbPagingCursors :: Maybe FBCursors
     } deriving (Show, Generic)
 instance Hashable FBPaging
 
 
 data FBData a = FBData
-    { fbDatadata    :: [a]
+    { fbDataData    :: [a]
     , fbDataSummary :: Maybe FBDataSummary
     , fbDataPaging  :: Maybe FBPaging
     } deriving (Show, Generic)
@@ -74,6 +74,22 @@ data FBFriends = FBFriends
     } deriving (Show, Generic)
 instance Hashable FBFriends
 
+data FBNewsFeedFrom = FBNewsFeedFrom
+    { fbNewsFeedFromName :: Text
+    , fbNewsFeedFromCategory :: Text
+    , fbNewsFeedFromId :: Text
+    } deriving (Show, Generic)
+instance Hashable FBNewsFeedFrom
+
+data FBNewsFeed = FBNewsFeed
+    { fbNewsFeedId :: Text
+    , fbNewsFeedFrom :: Maybe FBNewsFeedFrom
+    , fbNewsFeedStory :: Maybe Text
+    , fbNewsFeedName :: Maybe Text
+    , fbNewsFeedType :: Maybe Text
+    , fbNewsFeedCreated_type :: Maybe Text
+    } deriving (Show, Generic)
+instance Hashable FBNewsFeed
 
 data FBUser = FBUser
     { fbUserId      :: Text
@@ -89,9 +105,31 @@ newtype Token = Token Text
 instance ToHttpApiData Token where
     toUrlPiece (Token txt) = txt
 
+data FBPost = FBPost
+    { fbPostId          :: Text
+    , fbPostCaption     :: Maybe Text
+    , fbPostCreate_time  :: Maybe Text
+    , fbPostDescription :: Maybe Text
+    , fbPostStatus_type :: Maybe Text
+    , fbPostCountries   :: Maybe [Text]
+    , fbPostType        :: Maybe Text
+    } deriving Show
+
+
+{-status type-}
+{-enum{mobile_status_update, created_note, added_photos, added_video,-}
+{-shared_story, created_group, created_event, wall_post, app_created_story,-}
+{-published_story, tagged_in_photo, approved_friend}-}
+
+{-type-}
+{-enum{link, status, photo, video, offer}-}
 
 $(deriveJSON defaultOptions { fieldLabelModifier = stripPrefixJSON "fbCursors"}  ''FBCursors)
 $(deriveJSON defaultOptions { fieldLabelModifier = stripPrefixJSON "fbPagin"}  ''FBPaging)
 $(deriveJSON defaultOptions { fieldLabelModifier = stripPrefixJSON "fbDataSummary"}  ''FBDataSummary)
+$(deriveJSON defaultOptions { fieldLabelModifier = stripPrefixJSON "fbData"}  ''FBData)
 $(deriveJSON defaultOptions { fieldLabelModifier = stripPrefixJSON "fbFriends"}  ''FBFriends)
 $(deriveJSON defaultOptions { fieldLabelModifier = stripPrefixJSON "fbUser"}  ''FBUser)
+$(deriveJSON defaultOptions { fieldLabelModifier = stripPrefixJSON "fbPost"}  ''FBPost)
+$(deriveJSON defaultOptions { fieldLabelModifier = stripPrefixJSON "fbNewsFeedFrom"}  ''FBNewsFeedFrom)
+$(deriveJSON defaultOptions { fieldLabelModifier = stripPrefixJSON "fbNewsFeed"}  ''FBNewsFeed)

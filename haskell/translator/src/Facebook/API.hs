@@ -48,24 +48,30 @@ import Data.Either (isRight)
 
 -- | Base URL to the version 2.8 of the API
 baseUrl :: BaseUrl
-baseUrl = BaseUrl Https "graph.facebook.com" 443 "/v2.8"
+baseUrl = BaseUrl Https "graph.facebook.com" 443 ""
 
 
 
 -- Functions API
 
 getUserData :: Maybe Token -> Maybe FBFields -> ClientM FBUser
+getPosts :: Maybe Token -> ClientM (FBData FBPost)
+getNewsFeed :: Maybe Token -> ClientM (FBData FBNewsFeed)
 
 
 
 -- API
-getUserData = client fbAPI
+getUserData :<|> getPosts :<|> getNewsFeed = client fbAPI
 
 
 
 -- | FB API
 type FacebookAPI =
-    QueryParam "access_token" Token :> "me" :> QueryParam "fields" FBFields :> Get '[JSON] FBUser
+         "v2.3" :> QueryParam "access_token" Token :> "me" :> QueryParam "fields" FBFields :> Get '[JSON] FBUser
+    :<|> "v2.3" :> QueryParam "access_token" Token :> "me" :> "feed" :> Get '[JSON] (FBData FBPost)
+    :<|> "v2.3" :> QueryParam "access_token" Token :> "me" :> "home" :> Get '[JSON] (FBData FBNewsFeed)
+
+
 
 
 fbAPI :: Proxy FacebookAPI
