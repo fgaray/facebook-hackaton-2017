@@ -1,4 +1,4 @@
-package com.facebookdisaster;
+package com.SocialDisaster;
 
 import com.facebook.react.ReactActivity;
 
