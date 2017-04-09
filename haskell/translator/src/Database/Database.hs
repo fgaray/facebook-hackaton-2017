@@ -22,37 +22,43 @@ import Control.Monad.Logger
 import Control.Monad.Trans.Resource
 import Data.Maybe
 
-type Token = Text
+type ChatState = Text
 type FBId = Text
 
 
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 User
     fbId FBId
-    fbToken Token
+    fbChatState ChatState
     deriving Show
 |]
 
 
 
--- | Store the token. If we already have the user in the DB, then we replace the
+-- | Store the state. If we already have the user in the DB, then we replace the
 -- old token with the new one provided
-storeToken :: FBId -> Token -> ReaderT SqlBackend (NoLoggingT (ResourceT IO)) ()
-storeToken fbId token = do
+storeChatState :: FBId -> ChatState -> ReaderT SqlBackend (NoLoggingT (ResourceT IO)) ()
+storeChatState fbId state = do
     x <- liftM listToMaybe . select $
             from $ \u -> do
-            where_ (u ^. UserFbId ==. val fbId)
+            where_ (u ^. UserFbChatState ==. val fbId)
             limit 1
             return u
     case x of
-        Nothing -> void . insert $ User fbId token
+        Nothing -> void . insert $ User fbId state
         Just u  -> update $ \u -> do
-                        set u [ UserFbToken =. val token ]
+                        set u [ UserFbChatState =. val state ]
                         where_ (u ^. UserFbId ==. val fbId)
 
-getToken :: FBId -> ReaderT SqlBackend (NoLoggingT (ResourceT IO)) (Maybe Token)
-getToken fbId = liftM (fmap unValue . listToMaybe) . select $
+getAppState :: FBId -> ReaderT SqlBackend (NoLoggingT (ResourceT IO)) (Maybe ChatState)
+getAppState fbId = liftM (fmap unValue . listToMaybe) . select $
     from $ \u -> do
     where_ (u ^. UserFbId ==. val fbId)
     limit 1
-    return (u ^. UserFbToken)
+    return (u ^. UserFbChatState)
+
+
+
+runDB :: ReaderT SqlBackend (NoLoggingT (ResourceT IO)) a -> IO a
+runDB sql = runSqlite "db.sqlite3" (runMigration migrateAll >> sql)
+    
