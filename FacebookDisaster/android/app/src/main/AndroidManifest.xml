@@ -3,6 +3,7 @@
     android:versionCode="1"
     android:versionName="1.0">
 
+    <uses-permission android:name="de.tubs.ibr.dtn.permission.DTN_COMMUNICATION"/>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
@@ -25,8 +26,34 @@
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
+         <intent-filter >
+            <action android:name="de.tubs.ibr.dtn.intent.DTNAPP" />
+            <category android:name="android.intent.category.DEFAULT" />
+         </intent-filter>
       </activity>
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
+
+
+       <service android:name=".IBRDTN.DTNService" />
+
+
+
+        <receiver
+            android:name=".IBRDTN.EventReceiver"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="de.tubs.ibr.dtn.permission.DTN_SERVER" >
+
+            <!-- Add intent filter for notification of incoming bundles -->
+            <intent-filter>
+                <action android:name="de.tubs.ibr.dtn.intent.RECEIVE" />
+                <category android:name="com.SocialDisaster" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="de.tubs.ibr.dtn.intent.STATUS_REPORT" />
+                <category android:name="com.SocialDisaster" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

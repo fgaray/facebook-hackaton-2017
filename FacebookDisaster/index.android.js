@@ -10,13 +10,22 @@ import {
   AppRegistry,
   StyleSheet,
   Text,
-  View
+  View,
+  Button,
 } from 'react-native';
+
+
+const onButtonPress = () =>{
+    console.log("boton send");
+    ibrdtn.send("dtn://android-7e42bc4.dtn");
+}
+
 
 export default class FacebookDisaster extends Component {
   constructor(props){
       super(props);
       ibrdtn.show('Awesome', ibrdtn.SHORT); 
+      ibrdtn.init(); 
   }
   render() {
     return (
@@ -31,6 +40,7 @@ export default class FacebookDisaster extends Component {
           Double tap R on your keyboard to reload,{'\n'}
           Shake or press menu button for dev menu
         </Text>
+        <Button onPress={onButtonPress} title="Send" color="#841584" accessibilityLabel="Learn more about this purple button" />
       </View>
     );
   }
